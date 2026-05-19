@@ -430,21 +430,21 @@ examples = [
     #     "question": "If a bat and a ball cost $1.10 in total, and the bat costs $1.00 more than the ball, how much does the ball cost?",
     #     "gold_answer": "$0.05"
     # },
-    {
-        "id": "sheep",
-        "question": "A farmer has 15 sheep, and all but 8 die. How many are left?",
-        "gold_answer": "8"
-    },
+    # {
+    #     "id": "sheep",
+    #     "question": "A farmer has 15 sheep, and all but 8 die. How many are left?",
+    #     "gold_answer": "8"
+    # },
     # {
     #     "id": "addition",
     #     "question": "What is 17 + 28?",
     #     "gold_answer": "45"
     # },
-    # {
-    #     "id": "days",
-    #     "question": "If today is Monday, what day will it be in 3 days?",
-    #     "gold_answer": "Thursday"
-    # },
+    {
+        "id": "days",
+        "question": "If today is Monday, what day will it be in 3 days?",
+        "gold_answer": "Thursday"
+    },
     # {
     #     "id": "mary_father",
     #     "question": "Mary's father has five daughters: Nana, Nene, Nini, Nono. What is the fifth daughter's name?",
@@ -470,11 +470,11 @@ examples = [
     #     "question": "A boy and his father are in a car accident. The father dies. The boy is taken to surgery. The surgeon says, 'I cannot operate on him; he is my son.' How is this possible?",
     #     "gold_answer": "mother",
     # },
-    {
-        "id": "digit_sum_mod7",
-        "question": "Let S be the sum of all three-digit positive integers whose digits sum to 15 and which leave a remainder of 2 when divided by 7. Find the remainder when S is divided by 1000.",
-        "gold_answer": "672",
-    }
+    # {
+    #     "id": "digit_sum_mod7",
+    #     "question": "Let S be the sum of all three-digit positive integers whose digits sum to 15 and which leave a remainder of 2 when divided by 7. Find the remainder when S is divided by 1000.",
+    #     "gold_answer": "672",
+    # }
 ]
 
 
