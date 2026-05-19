@@ -94,10 +94,10 @@ def extract_thinking(reasoning_text):
     """
     match = re.search(r"<think>(.*?)</think>", reasoning_text, flags=re.DOTALL)
     if match:
-        print("<think></think>")
+        print("-------<think></think>")
         return match.group(1).strip()
     if "</think>" in reasoning_text:
-        print("</think>")
+        print("-------</think>")
         return reasoning_text.split("</think>", 1)[0].strip()
     return reasoning_text.strip()
 
