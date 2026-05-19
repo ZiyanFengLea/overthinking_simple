@@ -104,7 +104,8 @@ def split_steps(reasoning_text):
     """
     Split reasoning/content into steps.
 
-    The paper counts reasoning steps with sentence segmentation. Use small regex sentence splitter.
+    The paper counts reasoning steps with sentence segmentation. Use NLTK if it is
+    installed; otherwise fall back to a small regex sentence splitter.
     """
     pattern = r"(Step\s+\d+\s*:)"
     parts = re.split(pattern, reasoning_text)
@@ -117,6 +118,14 @@ def split_steps(reasoning_text):
 
     if steps:
         return steps
+
+    try:
+        import nltk
+
+        sentence_parts = nltk.sent_tokenize(reasoning_text)
+        return [s.strip() for s in sentence_parts if s.strip()]
+    except Exception:
+        pass
 
     sentence_parts = re.split(r"(?<=[.!?。！？])\s+", reasoning_text)
     return [s.strip() for s in sentence_parts if s.strip()]
@@ -483,67 +492,68 @@ def run_small_pilot(examples):
             gold_answer=ex["gold_answer"],
         )
 
-        diagnosis = example_result["diagnosis"]
-        diagnosis_rows.append({
-            "example_id": ex["id"],
-            "question": example_result["question"],
-            "gold_answer": example_result["gold_answer"],
-            "final_answer": example_result["final_answer"],
-            "resolved": diagnosis.get("resolved"),
-            "unstable_reason": diagnosis.get("unstable_reason"),
-            "final_correct": diagnosis.get("final_correct"),
-            "stable": diagnosis.get("stable"),
-            "stability_agreement_ratio": diagnosis.get("stability_agreement_ratio"),
-            "earliest_sufficient_step": diagnosis.get("earliest_sufficient_step"),
-            "correctness_measure": diagnosis.get("correctness_measure"),
-            "post_sufficiency_ll_productivity_label": diagnosis.get("post_sufficiency_productivity_label"),
-            "post_sufficiency_content_length_label": diagnosis.get("post_sufficiency_content_length_label"),
-            "post_sufficiency_content_mean_gain": diagnosis.get("post_sufficiency_content_mean_gain"),
-            "content_length_plateau": diagnosis.get("content_length_plateau"),
-            "overthinking": diagnosis.get("overthinking"),
-            "diagnosis": diagnosis.get("diagnosis"),
-        })
-
-        for row in example_result["results"]:
-            all_rows.append({
-                "example_id": ex["id"],
-                "question": example_result["question"],
-                "gold_answer": example_result["gold_answer"],
-                "final_answer": example_result["final_answer"],
-                "full_thinking_step_len": example_result["full_thinking_step_len"],
-                "full_thinking_token_len": example_result["full_thinking_token_len"],
-                "step": row["step"],
-                "thinking_step_len": row["thinking_step_len"],
-                "thinking_token_len": row["thinking_token_len"],
-                "prefix": row["prefix"],
-                "raw_content": row["raw_content"],
-                "content_step_len": row["content_step_len"],
-                "content_token_len": row["content_token_len"],
-                "content_char_len": row["content_char_len"],
-                "content_truncated": row["content_truncated"],
-                "raw_generated_token_len": row["raw_generated_token_len"],
-                "hit_max_new_tokens": row["hit_max_new_tokens"],
-                "ended_with_im_end": row["ended_with_im_end"],
-                "content": row["content"],
-                "induced_answer": row["induced_answer"],
-                "baseline_gold_answer_likelihood": row["baseline_gold_answer_likelihood"],
-                "gold_answer_likelihood": row["gold_answer_likelihood"],
-                "gold_answer_likelihood_delta": row["gold_answer_likelihood_delta"],
-                "final_answer_likelihood": row["final_answer_likelihood"],
-                "gold_vs_final_margin": row["gold_vs_final_margin"],
-            })
-
-    return all_rows, diagnosis_rows
+    #     diagnosis = example_result["diagnosis"]
+    #     diagnosis_rows.append({
+    #         "example_id": ex["id"],
+    #         "question": example_result["question"],
+    #         "gold_answer": example_result["gold_answer"],
+    #         "final_answer": example_result["final_answer"],
+    #         "resolved": diagnosis.get("resolved"),
+    #         "unstable_reason": diagnosis.get("unstable_reason"),
+    #         "final_correct": diagnosis.get("final_correct"),
+    #         "stable": diagnosis.get("stable"),
+    #         "stability_agreement_ratio": diagnosis.get("stability_agreement_ratio"),
+    #         "earliest_sufficient_step": diagnosis.get("earliest_sufficient_step"),
+    #         "correctness_measure": diagnosis.get("correctness_measure"),
+    #         "post_sufficiency_ll_productivity_label": diagnosis.get("post_sufficiency_productivity_label"),
+    #         "post_sufficiency_content_length_label": diagnosis.get("post_sufficiency_content_length_label"),
+    #         "post_sufficiency_content_mean_gain": diagnosis.get("post_sufficiency_content_mean_gain"),
+    #         "content_length_plateau": diagnosis.get("content_length_plateau"),
+    #         "overthinking": diagnosis.get("overthinking"),
+    #         "diagnosis": diagnosis.get("diagnosis"),
+    #     })
+    #
+    #     for row in example_result["results"]:
+    #         all_rows.append({
+    #             "example_id": ex["id"],
+    #             "question": example_result["question"],
+    #             "gold_answer": example_result["gold_answer"],
+    #             "final_answer": example_result["final_answer"],
+    #             "full_thinking_step_len": example_result["full_thinking_step_len"],
+    #             "full_thinking_token_len": example_result["full_thinking_token_len"],
+    #             "step": row["step"],
+    #             "thinking_step_len": row["thinking_step_len"],
+    #             "thinking_token_len": row["thinking_token_len"],
+    #             "prefix": row["prefix"],
+    #             "raw_content": row["raw_content"],
+    #             "content_step_len": row["content_step_len"],
+    #             "content_token_len": row["content_token_len"],
+    #             "content_char_len": row["content_char_len"],
+    #             "content_truncated": row["content_truncated"],
+    #             "raw_generated_token_len": row["raw_generated_token_len"],
+    #             "hit_max_new_tokens": row["hit_max_new_tokens"],
+    #             "ended_with_im_end": row["ended_with_im_end"],
+    #             "content": row["content"],
+    #             "induced_answer": row["induced_answer"],
+    #             "baseline_gold_answer_likelihood": row["baseline_gold_answer_likelihood"],
+    #             "gold_answer_likelihood": row["gold_answer_likelihood"],
+    #             "gold_answer_likelihood_delta": row["gold_answer_likelihood_delta"],
+    #             "final_answer_likelihood": row["final_answer_likelihood"],
+    #             "gold_vs_final_margin": row["gold_vs_final_margin"],
+    #         })
+    #
+    # return all_rows, diagnosis_rows
 
 
 if __name__ == "__main__":
-    all_rows, diagnosis_rows = run_small_pilot(examples)
+    run_small_pilot(examples)
+    # all_rows, diagnosis_rows = run_small_pilot(examples)
 
-    df = pd.DataFrame(all_rows)
-    df.to_csv(PREFIX_METRICS_CSV, index=False)
-
-    diagnosis_df = pd.DataFrame(diagnosis_rows)
-    diagnosis_df.to_csv(DIAGNOSIS_CSV, index=False)
-
-    print(f"\nSaved prefix-level metrics to {PREFIX_METRICS_CSV}")
-    print(f"Saved trajectory-level diagnosis to {DIAGNOSIS_CSV}")
+    # df = pd.DataFrame(all_rows)
+    # df.to_csv(PREFIX_METRICS_CSV, index=False)
+    #
+    # diagnosis_df = pd.DataFrame(diagnosis_rows)
+    # diagnosis_df.to_csv(DIAGNOSIS_CSV, index=False)
+    #
+    # print(f"\nSaved prefix-level metrics to {PREFIX_METRICS_CSV}")
+    # print(f"Saved trajectory-level diagnosis to {DIAGNOSIS_CSV}")
