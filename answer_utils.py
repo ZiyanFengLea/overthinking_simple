@@ -147,6 +147,10 @@ def extract_final_answer(text: Any) -> str:
         if matches:
             return clean_extracted_answer(matches[-1].group(1))
 
+    compact = clean_extracted_answer(search_text)
+    if compact and "\n" not in search_text.strip() and len(compact.split()) <= 12:
+        return compact
+
     return ""
 
 
@@ -169,38 +173,6 @@ def extract_induced_answer(text: Any) -> str:
 
     first_line = text.splitlines()[0].strip() if text else ""
     return clean_extracted_answer(first_line)
-
-
-def candidate_for_likelihood(answer):
-    """
-    Prepare answer candidate for likelihood computation.
-
-    Important:
-    - Do NOT lowercase text answers.
-    - For numeric/currency answers, use canonical numeric form.
-    - For names / weekdays / words, preserve original capitalization.
-    """
-    if answer is None:
-        return ""
-
-    raw = clean_for_compare(answer)
-
-    if not raw:
-        return ""
-
-    canon = canonicalize_answer(raw)
-
-    # If canonical form is numeric, use the numeric form.
-    # Examples: "$0.05" -> "0.05", "5 cents" -> "0.05"
-    try:
-        float(canon)
-        return canon
-    except ValueError:
-        pass
-
-    # For text answers, preserve cleaned original form.
-    # Examples: "Mary" stays "Mary", "Thursday" stays "Thursday"
-    return raw
 
 
 def surface_candidate_for_likelihood(answer: Any) -> str:
