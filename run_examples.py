@@ -18,7 +18,7 @@ from diagnosis import analyze_trajectory
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print("Using device:", device)
 
-model_name = "Qwen/Qwen3-0.6B"
+model_name = "Qwen/Qwen3-1.7B"
 REASONING_MAX_NEW_TOKENS = 800
 CONTENT_MAX_NEW_TOKENS = 512
 PREFIX_METRICS_CSV = "overthinking_prefix_metrics.csv"
@@ -94,10 +94,8 @@ def extract_thinking(reasoning_text):
     """
     match = re.search(r"<think>(.*?)</think>", reasoning_text, flags=re.DOTALL)
     if match:
-        print("-------<think></think>")
         return match.group(1).strip()
     if "</think>" in reasoning_text:
-        print("-------</think>")
         return reasoning_text.split("</think>", 1)[0].strip()
     return reasoning_text.strip()
 
@@ -427,16 +425,16 @@ def run_one_example(question, gold_answer):
 
 
 examples = [
-    # {
-    #     "id": "bat_ball",
-    #     "question": "If a bat and a ball cost $1.10 in total, and the bat costs $1.00 more than the ball, how much does the ball cost?",
-    #     "gold_answer": "$0.05"
-    # },
     {
-        "id": "sheep",
-        "question": "A farmer has 15 sheep, and all but 8 die. How many are left?",
-        "gold_answer": "8"
+        "id": "bat_ball",
+        "question": "If a bat and a ball cost $1.10 in total, and the bat costs $1.00 more than the ball, how much does the ball cost?",
+        "gold_answer": "$0.05"
     },
+    # {
+    #     "id": "sheep",
+    #     "question": "A farmer has 15 sheep, and all but 8 die. How many are left?",
+    #     "gold_answer": "8"
+    # },
     # {
     #     "id": "addition",
     #     "question": "What is 17 + 28?",
