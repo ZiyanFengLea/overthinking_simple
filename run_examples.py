@@ -341,8 +341,8 @@ def run_one_example(question, gold_answer):
         print("content step length:", content_info["content_step_len"])
         print("content token length:", content_info["content_token_len"])
         print("content truncated:", content_info["content_truncated"])
-        print("raw generated token length:", content_info["raw_generated_token_len"])
-        print("ended with im_end:", content_info["ended_with_im_end"])
+        # print("raw generated token length:", content_info["raw_generated_token_len"])
+        # print("ended with im_end:", content_info["ended_with_im_end"])
         print("induced answer:", content_info["induced_answer"])
         if content_info["content_token_len"] == 0 or content_info["hit_max_new_tokens"]:
             print("raw content:")
@@ -425,11 +425,11 @@ def run_one_example(question, gold_answer):
 
 
 examples = [
-    {
-        "id": "bat_ball",
-        "question": "If a bat and a ball cost $1.10 in total, and the bat costs $1.00 more than the ball, how much does the ball cost?",
-        "gold_answer": "$0.05"
-    },
+    # {
+    #     "id": "bat_ball",
+    #     "question": "If a bat and a ball cost $1.10 in total, and the bat costs $1.00 more than the ball, how much does the ball cost?",
+    #     "gold_answer": "$0.05"
+    # },
     # {
     #     "id": "sheep",
     #     "question": "A farmer has 15 sheep, and all but 8 die. How many are left?",
@@ -445,11 +445,11 @@ examples = [
     #     "question": "If today is Monday, what day will it be in 3 days?",
     #     "gold_answer": "Thursday"
     # },
-    # {
-    #     "id": "mary_father",
-    #     "question": "Mary's father has five daughters: Nana, Nene, Nini, Nono. What is the fifth daughter's name?",
-    #     "gold_answer": "Mary"
-    # },
+    {
+        "id": "mary_father",
+        "question": "Mary's father has five daughters: Nana, Nene, Nini, Nono. What is the fifth daughter's name?",
+        "gold_answer": "Mary"
+    },
     # {
     #     "id": "race_second",
     #     "question": "You are running a race and you pass the person in second place. What place are you in?",
