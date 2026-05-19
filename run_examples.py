@@ -470,11 +470,11 @@ examples = [
     #     "question": "A boy and his father are in a car accident. The father dies. The boy is taken to surgery. The surgeon says, 'I cannot operate on him; he is my son.' How is this possible?",
     #     "gold_answer": "mother",
     # },
-    # {
-    #     "id": "digit_sum_mod7",
-    #     "question": "Let S be the sum of all three-digit positive integers whose digits sum to 15 and which leave a remainder of 2 when divided by 7. Find the remainder when S is divided by 1000.",
-    #     "gold_answer": "672",
-    # }
+    {
+        "id": "digit_sum_mod7",
+        "question": "Let S be the sum of all three-digit positive integers whose digits sum to 15 and which leave a remainder of 2 when divided by 7. Find the remainder when S is divided by 1000.",
+        "gold_answer": "672",
+    }
 ]
 
 
