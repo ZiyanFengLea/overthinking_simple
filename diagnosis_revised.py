@@ -111,16 +111,16 @@ def find_overthinking_steps(
     tail_percentile: float = 0.1,
 ) -> Dict[str, Any]:
     """
-    Mark post-stability steps whose correctness gain is in the low tail.
+    Mark post-stability steps whose correctness gain is non-positive.
 
-    Low-tail gains are treated as stagnant/regressive.
+    The global low-tail threshold is still reported as a severity reference.
     """
     values = likelihood_values(results, final_correct)
     gains = stepwise_gains(values)
     valid_gains = [gain for gain in gains if gain is not None]
     threshold = percentile(valid_gains, tail_percentile)
 
-    if stability_step is None or threshold is None:
+    if stability_step is None:
         return {
             "likelihood_gain_tail_threshold": threshold,
             "overthinking_steps": [],
@@ -132,7 +132,7 @@ def find_overthinking_steps(
             continue
 
         step = results[idx].get("step", idx + 1)
-        if step >= stability_step and gain <= threshold:
+        if step >= stability_step and gain <= 0:
             overthinking_steps.append(step)
 
     return {

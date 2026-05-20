@@ -421,21 +421,21 @@ examples = [
     #     "question": "What is 17 + 28?",
     #     "gold_answer": "45"
     # },
-    {
-        "id": "days",
-        "question": "If today is Monday, what day will it be in 3 days?",
-        "gold_answer": "Thursday"
-    },
-    {
-        "id": "mary_father",
-        "question": "Mary's father has five daughters: Nana, Nene, Nini, Nono. What is the fifth daughter's name?",
-        "gold_answer": "Mary"
-    },
-    {
-        "id": "race_second",
-        "question": "You are running a race and you pass the person in second place. What place are you in?",
-        "gold_answer": "second",
-    },
+    # {
+    #     "id": "days",
+    #     "question": "If today is Monday, what day will it be in 3 days?",
+    #     "gold_answer": "Thursday"
+    # },
+    # {
+    #     "id": "mary_father",
+    #     "question": "Mary's father has five daughters: Nana, Nene, Nini, Nono. What is the fifth daughter's name?",
+    #     "gold_answer": "Mary"
+    # },
+    # {
+    #     "id": "race_second",
+    #     "question": "You are running a race and you pass the person in second place. What place are you in?",
+    #     "gold_answer": "second",
+    # },
     # {
     #     "id": "apples_take",
     #     "question": "There are three apples on a table. You take two apples. How many apples do you have?",

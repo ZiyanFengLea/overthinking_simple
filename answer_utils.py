@@ -236,6 +236,40 @@ def canonicalize_answer(answer: Any) -> str:
     return answer
 
 
+def short_answer_contained(short_answer: str, long_answer: str) -> bool:
+    """Conservative fallback for cases like 'Mary' vs 'The answer is Mary'."""
+    if not short_answer or not long_answer:
+        return False
+
+    short_answer = short_answer.strip().lower()
+    long_answer = long_answer.strip().lower()
+
+    # Keep the fallback narrow: it is meant for compact gold answers, not long
+    # explanations. Numeric answers use digit boundaries to avoid 1 matching 12.
+    if len(short_answer.split()) > 3 or len(short_answer) > 30:
+        return False
+
+    if re.fullmatch(r"-?\d+(?:\.\d+)?", short_answer):
+        pattern = rf"(?<![\d.]){re.escape(short_answer)}(?![\d.])"
+    else:
+        pattern = rf"\b{re.escape(short_answer)}\b"
+
+    return re.search(pattern, long_answer) is not None
+
+
 def answers_match(a: Any, b: Any) -> bool:
     """Return whether two answer strings are equivalent after canonicalization."""
-    return canonicalize_answer(a) == canonicalize_answer(b)
+    ca = canonicalize_answer(a)
+    cb = canonicalize_answer(b)
+
+    if ca and cb and ca == cb:
+        return True
+
+    a_is_numeric = bool(re.fullmatch(r"-?\d+(?:\.\d+)?", ca))
+    b_is_numeric = bool(re.fullmatch(r"-?\d+(?:\.\d+)?", cb))
+    if a_is_numeric and b_is_numeric:
+        return short_answer_contained(ca, cb) or short_answer_contained(cb, ca)
+
+    sa = clean_for_compare(a).lower()
+    sb = clean_for_compare(b).lower()
+    return short_answer_contained(sa, sb) or short_answer_contained(sb, sa)
