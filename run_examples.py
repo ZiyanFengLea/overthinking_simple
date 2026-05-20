@@ -35,9 +35,45 @@ model = AutoModelForCausalLM.from_pretrained(
     quantization_config=bnb_config,
     dtype=torch.float32,
     low_cpu_mem_usage=True,
-).to(device)
+    device_map="auto",
+)
 
 model.eval()
+
+
+# import re
+#
+# import torch
+# import torch.nn.functional as F
+# from transformers import AutoModelForCausalLM, AutoTokenizer
+#
+# from answer_utils import (
+#     answers_match,
+#     extract_final_answer,
+#     extract_induced_answer,
+#     remove_special_tokens,
+#     remove_think_block,
+#     surface_candidate_for_likelihood,
+# )
+# from diagnosis_revised import analyze_trajectory
+#
+# device = "cpu"
+# print("Using device:", device)
+#
+# model_name = "Qwen/Qwen3-0.6B"
+# REASONING_MAX_NEW_TOKENS = 500
+# CONTENT_MAX_NEW_TOKENS = 312
+#
+# tokenizer = AutoTokenizer.from_pretrained(model_name)
+#
+# model = AutoModelForCausalLM.from_pretrained(
+#     model_name,
+#     dtype=torch.float32,
+#     low_cpu_mem_usage=True,
+# )
+#
+# model.to(device)
+# model.eval()
 
 
 def build_base_messages(question):
@@ -100,7 +136,7 @@ def split_steps(reasoning_text):
     """
     Split reasoning/content into steps.
 
-    The paper counts reasoning steps with sentence segmentation. Use NLTK if it is
+    This method counts reasoning steps with sentence segmentation. Use NLTK if it is
     installed; otherwise fall back to a small regex sentence splitter.
     """
     pattern = r"(Step\s+\d+\s*:)"
@@ -375,31 +411,31 @@ examples = [
     #     "question": "If a bat and a ball cost $1.10 in total, and the bat costs $1.00 more than the ball, how much does the ball cost?",
     #     "gold_answer": "$0.05"
     # },
-    # {
-    #     "id": "sheep",
-    #     "question": "A farmer has 15 sheep, and all but 8 die. How many are left?",
-    #     "gold_answer": "8"
-    # },
+    {
+        "id": "sheep",
+        "question": "A farmer has 15 sheep, and all but 8 die. How many are left?",
+        "gold_answer": "8"
+    },
     # {
     #     "id": "addition",
     #     "question": "What is 17 + 28?",
     #     "gold_answer": "45"
     # },
-    # {
-    #     "id": "days",
-    #     "question": "If today is Monday, what day will it be in 3 days?",
-    #     "gold_answer": "Thursday"
-    # },
+    {
+        "id": "days",
+        "question": "If today is Monday, what day will it be in 3 days?",
+        "gold_answer": "Thursday"
+    },
     {
         "id": "mary_father",
         "question": "Mary's father has five daughters: Nana, Nene, Nini, Nono. What is the fifth daughter's name?",
         "gold_answer": "Mary"
     },
-    # {
-    #     "id": "race_second",
-    #     "question": "You are running a race and you pass the person in second place. What place are you in?",
-    #     "gold_answer": "second",
-    # },
+    {
+        "id": "race_second",
+        "question": "You are running a race and you pass the person in second place. What place are you in?",
+        "gold_answer": "second",
+    },
     # {
     #     "id": "apples_take",
     #     "question": "There are three apples on a table. You take two apples. How many apples do you have?",
@@ -409,11 +445,6 @@ examples = [
     #     "id": "months_28_days",
     #     "question": "How many months have 28 days?",
     #     "gold_answer": "12",
-    # },
-    # {
-    #     "id": "doctor_mother",
-    #     "question": "A boy and his father are in a car accident. The father dies. The boy is taken to surgery. The surgeon says, 'I cannot operate on him; he is my son.' How is this possible?",
-    #     "gold_answer": "mother",
     # },
     # {
     #     "id": "digit_sum_mod7",
